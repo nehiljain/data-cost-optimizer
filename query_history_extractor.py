@@ -1,7 +1,6 @@
-import pandas as pd
 from dagster import job, op, io_manager
 from local_csv_io import LocalCSVIOManager
-from dagster_snowflake import snowflake_resource
+from resources.dco_snowflake_connection import snowflake_resource
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -20,11 +19,11 @@ def get_query_history(context):
     from snowflake.account_usage.query_history
     where month(start_time) >= month(current_date) - 1
     """
-    result =  context.resources.snowflake.execute_query(query, fetch_results=True)
-    context.log.info(result)
-    # figure out better way to get a clean data frame
+    result = context.resources.snowflake.execute_query(query, fetch_results=True)
+    context.log.info(result.dtypes)
     # figure out a way to do chunking in case its a very large data source
-    return pd.DataFrame(result)
+    return result
+
 
 @job(resource_defs={"snowflake": snowflake_resource, "io_manager": local_csv_iom})
 def download_query_history_job():
@@ -32,7 +31,7 @@ def download_query_history_job():
 
 
 if __name__ == "__main__":
-    my_snowflake_job.execute_in_process(
+    download_query_history_job.execute_in_process(
         run_config={
             "resources": {
                 "snowflake": {
