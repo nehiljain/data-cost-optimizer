@@ -1,6 +1,12 @@
+from dagster import IOManager
+import pandas as pd
+
+
 class LocalCSVIOManager(IOManager):
     def handle_output(self, context, obj):
-        write_csv(os.get_env('WORKING_DIR'))
+        #TODO:need to get name from context
+        obj.to_csv(os.get_env("WORKING_DIR", "/tmp") + '/output.csv', header=True, index=False)
 
     def load_input(self, context):
-        return read_csv(os.get_env('WORKING_DIR'))
+        #TODO: need to get name from context like default io manager
+        return pd.read_csv(os.get_env("WORKING_DIR", "/tmp") + '/output.csv')
