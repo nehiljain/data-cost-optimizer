@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "data-cost-optimizer"
+version = "0.1.0"
+description = ""
+authors = ["Nehil Jain <2761999+nehiljain@users.noreply.github.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+snowflake-connector-python = {extras = ["pandas"], version = "^2.7.8"}
+dagster = "^0.14.17"
+dagster-snowflake = "^0.14.17"
+python-dotenv = "^0.20.0"
+dagit = "^0.14.17"
+
+[tool.poetry.dev-dependencies]
+commitizen = "^2.27.1"
+black = "^22.3.0"
+pylint = "^2.13.9"
+pytest = "^7.1.2"
+flake8 = "^4.0.1"
+pre-commit = "^2.19.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
